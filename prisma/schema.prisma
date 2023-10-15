@@ -28,6 +28,10 @@ model Auth{
   updatedAt DateTime @updatedAt
 
   user User[]
+  blog Blog[]
+  service Service[]
+  order Order[]
+  faq FAQ[]
 }
 
 model User {
@@ -43,6 +47,77 @@ model User {
   updatedAt   DateTime     @updatedAt
 }
 
+model BlogTag {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tagName   String
+  blogs     BlogTagToBlog[]  
+}
+
+model BlogTagToBlog {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  blog      Blog     @relation(fields: [blogId], references: [id])
+  blogId    String
+  tag       BlogTag  @relation(fields: [tagId], references: [id])
+  tagId     String
+}
+
+model Blog {
+  id         String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  blogImage   String       
+  blogContent String      
+  blogAuthor  Auth         @relation(fields: [addedBy], references: [id])
+  addedBy    String       
+  tags       BlogTagToBlog[] 
+}
+
+
+model Service {
+  id          String     @id @default(uuid())
+  addedBy String 
+  auth Auth @relation(fields: [addedBy], references: [id])
+  serviceName String
+  description String
+  features    String[]
+  idealFor    String
+  price       String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  order Order[]
+}
+
+
+model Order {
+  id           String      @id @default(uuid())
+  service     Service    @relation(fields: [serviceId], references: [id])
+  serviceId  String    
+  status       OrderStatus  @default(PENDING)
+  customer     Auth    @relation(fields: [customerId], references: [id])
+  customerId   String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model FAQ {
+  id          String      @id @default(uuid())
+  question    String
+  answer      String
+  auth Auth @relation(fields: [addedBy], references: [id])
+  addedBy     String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
+
 
 
 
@@ -52,4 +127,11 @@ enum AppRole {
   USER
   CONTENT_MANAGER
   PRODUCT_MANAGER
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELED
 }
