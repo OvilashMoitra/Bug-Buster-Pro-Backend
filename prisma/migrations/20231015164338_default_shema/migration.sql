@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Auth" ALTER COLUMN "role" SET DEFAULT '5e002e42-37c9-4a96-8f35-275b21cfb255';

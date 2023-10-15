@@ -7,10 +7,12 @@ dotenv.config({ path: path.join(process.cwd(), '.env') });
 export default {
   env: process.env.NODE_ENV,
   port: process.env.PORT,
+  server_url: process.env.SERVER_URL,
   database_url: process.env.DATABASE_URL,
-  default_student_pass: process.env.DEFAULT_STUDENT_PASS,
-  default_faculty_pass: process.env.DEFAULT_FACULTY_PASS,
-  default_admin_pass: process.env.DEFAULT_ADMIN_PASS,
+  email_sender_host_user: process.env.EMAIL_SENDER_HOST_USER,
+  resetPassword_token_expiresIn:
+    process.env.JWT_RESET_PASSWORD_TOKEN_EXPIRES_IN,
+  resetPassword_token_secret: process.env.JWT_RESET_PASSWORD_TOKEN_SECRET_KEY,
   bycrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
   jwt: {
     secret: process.env.JWT_SECRET,
