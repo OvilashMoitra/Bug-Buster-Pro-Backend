@@ -21,7 +21,7 @@ model Role{
 model Auth{
   id        String     @id @default(uuid())
   email     String   @unique
-  role String
+  role String @default("USER")
   Role Role @relation(fields: [role], references: [id])
   password  String   
   createdAt DateTime @default(now())
