@@ -12,3 +12,10 @@ AuthRouter.post('/change-password', AuthController.changePassword);
 AuthRouter.post('/reset-password', AuthController.initiateResetPassword);
 
 AuthRouter.post('/reset-password/:token', AuthController.makeResetPassword);
+
+// crud user
+AuthRouter.get('/:id', AuthController.getUser);
+
+AuthRouter.get('/', AuthController.getAllUser);
+
+AuthRouter.patch('/:id', AuthController.updateUser);

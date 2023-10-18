@@ -10,7 +10,9 @@ import cookieParser from 'cookie-parser';
 const app: Application = express();
 export const prisma = new PrismaClient()
 
-app.use(cors());
+app.use(cors({
+  credentials: true
+}));
 app.use(cookieParser());
 
 //parser
