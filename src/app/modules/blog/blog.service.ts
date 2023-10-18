@@ -3,19 +3,53 @@ import { Blog } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../../../app';
 import ApiError from '../../../errors/ApiError';
+import { ICreateBlog } from './blog.interface';
 
 
 
-const createBlog = async (payload: Blog) => {
-    const blog = await prisma.blog.create({
-        data: payload,
-        include: {
-            blogAuthor: true
+const createBlog = async (payload: ICreateBlog) => {
+
+    const blogTag = payload.blogTag;
+
+    // ! look for user
+    const user = prisma.user.findUnique({
+        where: {
+            id: payload.addedBy
         }
-    },
-    )
+    })
+    if (!user) {
+        throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
+    }
 
-    return blog;
+    const createBlogTransaction = await prisma.$transaction(async (tx) => {
+        const blog = await tx.blog.create({
+            data: {
+                addedBy: payload.addedBy,
+                blogContent: payload.blogContent,
+                blogImage: payload.blogImage
+            },
+            include: {
+                blogAuthor: {
+                    select: {
+                        email: true,
+                        role: true,
+                        id: true
+                    }
+                }
+            }
+        },
+        )
+        console.log({ blog });
+        tx.blogTagToBlog.create({
+            data: {
+                blogId: blog.id,
+                tagId: blogTag
+            }
+        })
+
+        return blog;
+    })
+    return createBlogTransaction
 };
 
 
