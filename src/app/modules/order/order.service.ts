@@ -6,6 +6,7 @@ import ApiError from '../../../errors/ApiError';
 type OrderPayload = {
     serviceId: string;
     customerId: string;
+    phoneNumber: string;
 }
 
 const createOrder = async (payload: OrderPayload): Promise<Order> => {
@@ -30,6 +31,7 @@ const createOrder = async (payload: OrderPayload): Promise<Order> => {
         data: {
             serviceId: payload.serviceId,
             customerId: payload.customerId,
+            phoneNumber: payload.phoneNumber
         },
         include: {
             service: true,
