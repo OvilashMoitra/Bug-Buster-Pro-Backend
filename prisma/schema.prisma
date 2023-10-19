@@ -145,7 +145,7 @@ model Job {
   applicationDeadline     DateTime
   createdAt               DateTime      @default(now())
   updatedAt               DateTime      @updatedAt
-  blogAuthor  Auth         @relation(fields: [addedBy], references: [id])
+  author  Auth         @relation(fields: [addedBy], references: [id])
   addedBy    String 
 }
 
