@@ -6,6 +6,7 @@ import { CartRouter } from '../modules/cart/cart.route';
 import { FAQRouter } from '../modules/faq/faq.route';
 import { JobRouter } from '../modules/job/job.route';
 import { OrderRouter } from '../modules/order/order.route';
+import { ReviewRouter } from '../modules/review/review.route';
 import { RoleRouter } from '../modules/role/role.route';
 import { ServiceRouter } from '../modules/service/service.route';
 import { StatsRouter } from '../modules/stats/stats.route';
@@ -53,6 +54,10 @@ const moduleRoutes = [
   {
     path: "/orders",
     routes: OrderRouter
+  },
+  {
+    path: "/review",
+    routes: ReviewRouter
   },
 ];
 

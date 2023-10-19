@@ -97,6 +97,7 @@ model Service {
 
   order Order[]
   cart Cart[]
+  review Review[]
 }
 
 
@@ -110,6 +111,8 @@ model Order {
   phoneNumber String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+
+  review Review[]
 }
 
 model FAQ {
@@ -168,6 +171,18 @@ model Contact {
   phoneNumber String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id              String       @id @default(uuid())
+  orderId String
+  order   Order @relation(fields: [orderId], references: [id])
+  serviceId String
+  service Service @relation(fields: [serviceId], references: [id])
+  rating          Int
+  comments        String
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 }
 
 
