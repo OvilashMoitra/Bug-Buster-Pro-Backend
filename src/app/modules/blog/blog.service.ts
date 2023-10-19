@@ -108,7 +108,12 @@ const getBlog = async (id: string) => {
             id: id
         },
         include: {
-            blogAuthor: true
+            blogAuthor: true,
+            tags: {
+                include: {
+                    tag: true
+                }
+            }
         }
     })
     return blog;

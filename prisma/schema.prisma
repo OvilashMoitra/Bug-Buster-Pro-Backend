@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,184 +7,176 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Role{
-  id        String     @id @default(uuid())
+model Role {
+  id        String   @id @default(uuid())
   name      AppRole
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  auth  Auth[]
+  auth      Auth[]
   jobLising Job[]
 }
 
-model Auth{
-  id        String     @id @default(uuid())
-  email     String   @unique
-  role String @default("5e002e42-37c9-4a96-8f35-275b21cfb255")
-  Role Role @relation(fields: [role], references: [id])
-  password  String   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User[]
-  blog Blog[]
-  service Service[]
-  order Order[]
-  faq FAQ[]
+model Auth {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  role      String    @default("5e002e42-37c9-4a96-8f35-275b21cfb255")
+  Role      Role      @relation(fields: [role], references: [id])
+  blog      Blog[]
+  cart      Cart[]
+  faq       FAQ[]
   jobLising Job[]
-  cart Cart[]
+  order     Order[]
+  service   Service[]
+  user      User[]
 }
 
 model User {
-  id         String       @id @default(uuid())
-  phoneNumber String?       @unique
+  id          String    @id @default(uuid())
+  phoneNumber String?   @unique
   userName    String?
-  authId String
-  auth   Auth @relation(fields: [authId], references: [id])
-  linkedIn    String?      
-  dateOfBirth DateTime?    
-  isRemoved   Boolean @default(false)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  authId      String
+  linkedIn    String?
+  dateOfBirth DateTime?
+  isRemoved   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  auth        Auth      @relation(fields: [authId], references: [id])
 }
 
 model BlogTag {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String          @id @default(uuid())
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
   tagName   String
-  blogs     BlogTagToBlog[]  
+  blogs     BlogTagToBlog[]
 }
 
 model BlogTagToBlog {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  blog      Blog     @relation(fields: [blogId], references: [id])
   blogId    String
-  tag       BlogTag  @relation(fields: [tagId], references: [id])
   tagId     String
+  blog      Blog     @relation(fields: [blogId], references: [id])
+  tag       BlogTag  @relation(fields: [tagId], references: [id])
 }
 
 model Blog {
-  id         String       @id @default(uuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  blogTitle String
-  blogImage   String       
-  blogContent String      
-  blogAuthor  Auth         @relation(fields: [addedBy], references: [id])
-  addedBy    String       
-  tags       BlogTagToBlog[] 
+  id          String          @id @default(uuid())
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  blogImage   String
+  blogContent String
+  addedBy     String
+  blogTitle   String
+  blogAuthor  Auth            @relation(fields: [addedBy], references: [id])
+  tags        BlogTagToBlog[]
 }
 
-
 model Service {
-  id          String     @id @default(uuid())
-  addedBy String 
-  auth Auth @relation(fields: [addedBy], references: [id])
-  category ServiceCatefory
+  id          String          @id @default(uuid())
+  addedBy     String
   serviceName String
   description String
   features    String[]
   idealFor    String
   price       String
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  order Order[]
-  cart Cart[]
-  review Review[]
+  isActive    Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  category    ServiceCatefory
+  cart        Cart[]
+  order       Order[]
+  review      Review[]
+  auth        Auth            @relation(fields: [addedBy], references: [id])
 }
 
-
 model Order {
-  id           String      @id @default(uuid())
-  service     Service    @relation(fields: [serviceId], references: [id])
-  serviceId  String    
-  status       OrderStatus  @default(PENDING)
-  customer     Auth    @relation(fields: [customerId], references: [id])
-  customerId   String
+  id          String      @id @default(uuid())
+  serviceId   String
+  status      OrderStatus @default(PENDING)
+  customerId  String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   phoneNumber String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-
-  review Review[]
+  customer    Auth        @relation(fields: [customerId], references: [id])
+  service     Service     @relation(fields: [serviceId], references: [id])
+  review      Review[]
 }
 
 model FAQ {
-  id          String      @id @default(uuid())
-  question    String
-  answer      String
-  auth Auth @relation(fields: [addedBy], references: [id])
-  addedBy     String
-  isActive    Boolean  @default(true)
+  id        String   @id @default(uuid())
+  question  String
+  answer    String
+  addedBy   String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  auth      Auth     @relation(fields: [addedBy], references: [id])
+}
+
+model WebsiteStats {
+  id            String   @id @default(uuid())
+  users         Int      @default(0)
+  blogs         Int      @default(0)
+  orders        Int      @default(0)
+  websiteVisits Int      @default(0)
+  updatedAt     DateTime @updatedAt
+}
+
+model Job {
+  id                      String   @id @default(uuid())
+  jobTitle                String
+  jobDescription          String
+  jobLocation             String
+  jobRole                 String
+  responsibilities        String[]
+  requirements            String[]
+  preferredQualifications String[]
+  applicationInstructions String
+  applicationDeadline     DateTime
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  addedBy                 String
+  author                  Auth     @relation(fields: [addedBy], references: [id])
+  role                    Role     @relation(fields: [jobRole], references: [id])
+}
+
+model Cart {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  serviceId String
+  product   Service  @relation(fields: [serviceId], references: [id])
+  auth      Auth     @relation(fields: [userId], references: [id])
+}
+
+model Contact {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  message     String
+  phoneNumber String
+  contactStatus ContactStatus @default(PENDING)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-
-model WebsiteStats {
-  id String      @id @default(uuid())
-  users        Int      @default(0)
-  orders       Int      @default(0)
-  websiteVisits Int      @default(0)
-  updatedAt    DateTime @updatedAt
-}
-
-model Job {
-  id String      @id @default(uuid())
-  jobTitle                String
-  jobDescription          String
-  jobLocation             String
-  role Role @relation(fields: [jobRole], references: [id])
-  jobRole                 String
-  responsibilities        String[]      
-  requirements            String[]      
-  preferredQualifications String[]      
-  applicationInstructions String
-  applicationDeadline     DateTime
-  createdAt               DateTime      @default(now())
-  updatedAt               DateTime      @updatedAt
-  author  Auth         @relation(fields: [addedBy], references: [id])
-  addedBy    String 
-}
-
-model Cart {
-  id String      @id @default(uuid())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  userId      String      
-  auth Auth @relation(fields: [userId], references: [id])
-  serviceId      String       
-  product        Service      @relation(fields: [serviceId], references: [id])
-}
-
-model Contact {
-  id String      @id @default(uuid())
-  name String
-  email String     @unique
-  message String
-  phoneNumber String?
+model Review {
+  id        String   @id @default(uuid())
+  orderId   String
+  rating    Int
+  comments  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Review {
-  id              String       @id @default(uuid())
-  orderId String
-  order   Order @relation(fields: [orderId], references: [id])
   serviceId String
-  service Service @relation(fields: [serviceId], references: [id])
-  rating          Int
-  comments        String
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id])
+  service   Service  @relation(fields: [serviceId], references: [id])
 }
-
-
-
-
 
 enum AppRole {
   SUPER_ADMIN
@@ -209,4 +198,9 @@ enum ServiceCatefory {
   BASE
   POPULAR
   ENTERPRISE
+}
+
+enum ContactStatus {
+  PENDING
+  COMPLETED
 }

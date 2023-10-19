@@ -31,6 +31,10 @@ const signup = async (payload: Auth) => {
             }
         })
 
+        await tx.user.create({
+            data: { authId: user.id }
+        })
+
         return userWithOutPassword
     })
 

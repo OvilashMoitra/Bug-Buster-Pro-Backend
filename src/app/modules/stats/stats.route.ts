@@ -10,7 +10,8 @@ StatsRouter.post('/create-stats', StatsController.createStats);
 
 StatsRouter.get('/', StatsController.getAllStats);
 
-StatsRouter.patch('/:id', StatsController.updateStats);
+StatsRouter.get('/updatePageView', StatsController.updatePageView);
+// StatsRouter.patch('/', StatsController.updateStats);
 
 
 

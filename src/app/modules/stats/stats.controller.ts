@@ -19,11 +19,9 @@ const createStats = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-const updateStats = async (req: Request, res: Response, next: NextFunction) => {
+const updatePageView = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const statsId = req.params.id;
-        const statsInfo = req.body;
-        const statsToUpdate = await StatsService.updateStats(statsInfo, statsId);
+        const statsToUpdate = await StatsService.updatePageView();
 
         if (!statsToUpdate) {
             throw new ApiError(StatusCodes.NOT_FOUND, 'Error updating stats');
@@ -48,6 +46,6 @@ const getAllStats = async (req: Request, res: Response, next: NextFunction) => {
 
 export const StatsController = {
     createStats,
-    updateStats,
+    updatePageView,
     getAllStats,
 };

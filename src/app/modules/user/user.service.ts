@@ -50,18 +50,30 @@ const getAllUsers = async (): Promise<User[]> => {
 };
 
 const getUserById = async (userId: string): Promise<User | null> => {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findMany({
         where: {
-            id: userId,
+            authId: userId,
         },
+        include: {
+            auth: {
+                select: {
+                    email: true,
+                    id: true
+                }
+            }
+        }
     });
 
-    return user;
+    console.log(user);
+
+    return user[0];
 };
 
-const updateUser = async (payload: UserPayload, userId: string): Promise<User | null> => {
-    try {
-        const existingUser = await prisma.user.findUnique({
+const updateUser = async (payload: UserPayload, userId: string) => {
+
+    console.log(payload);
+    console.log(userId);
+    const existingUser = await prisma.auth.findUnique({
             where: {
                 id: userId,
             },
@@ -72,17 +84,14 @@ const updateUser = async (payload: UserPayload, userId: string): Promise<User | 
         }
 
         // Update the properties of the existing user based on the payload
-        const updatedUser = await prisma.user.update({
+    const updatedUser = await prisma.user.updateMany({
             where: {
-                id: userId,
+            authId: userId
             },
             data: payload,
-        });
-
-        return updatedUser;
-    } catch (error) {
-        throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, 'Error updating user');
-    }
+    }) as unknown as User[];
+    console.log("updated user", updatedUser);
+    return updatedUser?.[0];
 };
 
 export const UserService = {

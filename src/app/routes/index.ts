@@ -3,6 +3,7 @@ import { AuthRouter } from '../modules/auth/auth.route';
 import { BlogRouter } from '../modules/blog/blog.route';
 import { BlogTagRouter } from '../modules/blogTag/blogTag.route';
 import { CartRouter } from '../modules/cart/cart.route';
+import { ContactRouter } from '../modules/contact/contact.route';
 import { FAQRouter } from '../modules/faq/faq.route';
 import { JobRouter } from '../modules/job/job.route';
 import { OrderRouter } from '../modules/order/order.route';
@@ -10,6 +11,7 @@ import { ReviewRouter } from '../modules/review/review.route';
 import { RoleRouter } from '../modules/role/role.route';
 import { ServiceRouter } from '../modules/service/service.route';
 import { StatsRouter } from '../modules/stats/stats.route';
+import { UserRouter } from '../modules/user/user.route';
 
 const router = express.Router();
 
@@ -58,6 +60,14 @@ const moduleRoutes = [
   {
     path: "/review",
     routes: ReviewRouter
+  },
+  {
+    path: "/user",
+    routes: UserRouter
+  },
+  {
+    path: "/contact",
+    routes: ContactRouter
   },
 ];
 

@@ -1,6 +1,7 @@
 import { Order } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../../../app';
+import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
 
 type OrderPayload = {
@@ -27,19 +28,33 @@ const createOrder = async (payload: OrderPayload): Promise<Order> => {
         throw new ApiError(StatusCodes.BAD_REQUEST, 'Service or customer not found');
     }
 
-    const order = await prisma.order.create({
-        data: {
-            serviceId: payload.serviceId,
-            customerId: payload.customerId,
-            phoneNumber: payload.phoneNumber
-        },
-        include: {
-            service: true,
-            customer: true,
-        },
-    });
+    const orderResponse = prisma.$transaction(async (tx) => {
+        const order = await tx.order.create({
+            data: {
+                serviceId: payload.serviceId,
+                customerId: payload.customerId,
+                phoneNumber: payload.phoneNumber
+            },
+            include: {
+                service: true,
+                customer: true,
+            },
+        });
 
-    return order;
+        tx.websiteStats.update({
+            data: {
+                orders: { increment: 1 }
+            },
+            where: {
+                id: config.stats_id
+            }
+        })
+
+        return order;
+    })
+
+    return orderResponse;
+
 };
 
 const deleteOrder = async (orderId: string): Promise<Order> => {

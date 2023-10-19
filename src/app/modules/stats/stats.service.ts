@@ -2,6 +2,7 @@
 import { WebsiteStats } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../../../app';
+import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
 
 
@@ -9,22 +10,19 @@ import ApiError from '../../../errors/ApiError';
 const createStats = async (payload: WebsiteStats) => {
     const stats = await prisma.websiteStats.create({
         data: payload,
-
     },
     )
     return stats;
 };
 
 
-const updateStats = async (
-    payload: Partial<WebsiteStats>,
-    id: string
-) => {
-
+const updatePageView = async () => {
     const statsToUpdate = await prisma.websiteStats.update({
-        data: payload,
+        data: {
+            websiteVisits: { increment: 1 },
+        },
         where: {
-            id: id
+            id: config.stats_id
         },
     })
 
@@ -44,6 +42,6 @@ const getAllStats = async () => {
 
 export const StatsService = {
     createStats,
-    updateStats,
+    updatePageView,
     getAllStats,
 };
