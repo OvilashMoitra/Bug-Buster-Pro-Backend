@@ -24,6 +24,7 @@ const createBlog = async (payload: ICreateBlog) => {
     const createBlogTransaction = await prisma.$transaction(async (tx) => {
         const blog = await tx.blog.create({
             data: {
+                blogTitle: payload.blogTitle,
                 addedBy: payload.addedBy,
                 blogContent: payload.blogContent,
                 blogImage: payload.blogImage
@@ -39,13 +40,27 @@ const createBlog = async (payload: ICreateBlog) => {
             }
         },
         )
-        console.log({ blog });
-        tx.blogTagToBlog.create({
-            data: {
-                blogId: blog.id,
-                tagId: blogTag
+        console.log({ blogTag });
+
+        const blogTagToBlog: {
+            blogId: string;
+            tagId: string;
+        }[] = blogTag.map(tag => {
+            return {
+                "blogId": blog.id,
+                "tagId": tag
             }
+        }
+        )
+
+
+        const blogTagRefernceCreate = await tx.blogTagToBlog.createMany({
+            data: blogTagToBlog
         })
+
+        console.log({ blogTagRefernceCreate });
+
+
 
         return blog;
     })
@@ -99,13 +114,22 @@ const getBlog = async (id: string) => {
     return blog;
 }
 const getAllBlog = async () => {
+
+    // const blogs = await prisma.blogTagToBlog.findMany({
+    //     include: {
+    //         blog: true,
+    //         tag: true
+    //     }
+    // })
     const blogs = await prisma.blog.findMany({
         include: {
-            blogAuthor: true,
-            tags: true
+            tags: {
+                include: {
+                    tag: true
+                }
+            }
         }
     })
-
     return blogs;
 }
 

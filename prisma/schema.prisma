@@ -34,6 +34,7 @@ model Auth{
   order Order[]
   faq FAQ[]
   jobLising Job[]
+  cart Cart[]
 }
 
 model User {
@@ -71,6 +72,7 @@ model Blog {
   id         String       @id @default(uuid())
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  blogTitle String
   blogImage   String       
   blogContent String      
   blogAuthor  Auth         @relation(fields: [addedBy], references: [id])
@@ -83,6 +85,7 @@ model Service {
   id          String     @id @default(uuid())
   addedBy String 
   auth Auth @relation(fields: [addedBy], references: [id])
+  category ServiceCatefory
   serviceName String
   description String
   features    String[]
@@ -93,6 +96,7 @@ model Service {
   updatedAt   DateTime @updatedAt
 
   order Order[]
+  cart Cart[]
 }
 
 
@@ -145,6 +149,15 @@ model Job {
   addedBy    String 
 }
 
+model Cart {
+  id String      @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  userId      String      
+  auth Auth @relation(fields: [userId], references: [id])
+  serviceId      String       
+  product        Service      @relation(fields: [serviceId], references: [id])
+}
 
 
 
@@ -162,4 +175,11 @@ enum OrderStatus {
   PROCESSING
   COMPLETED
   CANCELED
+}
+
+enum ServiceCatefory {
+  INTRO
+  BASE
+  POPULAR
+  ENTERPRISE
 }

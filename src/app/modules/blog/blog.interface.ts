@@ -2,5 +2,5 @@
 import { Blog } from '@prisma/client';
 
 export interface ICreateBlog extends Blog {
-    blogTag: string;
+    blogTag: string[];
 }
