@@ -13,6 +13,8 @@ const createCart = async (payload: Cart) => {
         },
     });
 
+    console.log({ cart });
+
     return cart;
 };
 
@@ -58,7 +60,7 @@ const getAllCarts = async () => {
 const getUserCart = async (id: string) => {
     const carts = await prisma.cart.findMany({
         where: {
-            id
+            userId: id
         },
         include: {
             product: true,

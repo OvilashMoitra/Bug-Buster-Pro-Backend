@@ -2,7 +2,9 @@ import express from 'express';
 import { AuthRouter } from '../modules/auth/auth.route';
 import { BlogRouter } from '../modules/blog/blog.route';
 import { BlogTagRouter } from '../modules/blogTag/blogTag.route';
+import { CartRouter } from '../modules/cart/cart.route';
 import { FAQRouter } from '../modules/faq/faq.route';
+import { JobRouter } from '../modules/job/job.route';
 import { RoleRouter } from '../modules/role/role.route';
 import { ServiceRouter } from '../modules/service/service.route';
 import { StatsRouter } from '../modules/stats/stats.route';
@@ -38,6 +40,14 @@ const moduleRoutes = [
   {
     path: "/stats",
     routes: StatsRouter
+  },
+  {
+    path: "/cart",
+    routes: CartRouter
+  },
+  {
+    path: "/job",
+    routes: JobRouter
   },
 ];
 
