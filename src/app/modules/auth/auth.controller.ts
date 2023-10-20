@@ -1,3 +1,4 @@
+import { IJWTData } from './../../../helpers/jwt/jwt';
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -25,12 +26,12 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
             role: user.role,
         };
         const accessToken = await jwtHelperFunction.generateJWTToken(
-            payload,
+            payload as IJWTData,
             config.jwt.expires_in!,
             config.jwt.secret!,
         );
         const refreshToken = await jwtHelperFunction.generateJWTToken(
-            payload,
+            payload as IJWTData,
             config.jwt.refresh_expires_in!,
             config.jwt.refresh_secret!,
         );
@@ -66,12 +67,12 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
             role: user.role,
         };
         const accessToken = await jwtHelperFunction.generateJWTToken(
-            payload,
+            payload as IJWTData,
             config.jwt.expires_in!,
             config.jwt.secret!,
         );
         const refreshToken = await jwtHelperFunction.generateJWTToken(
-            payload,
+            payload as IJWTData,
             config.jwt.refresh_expires_in!,
             config.jwt.refresh_secret!,
         );

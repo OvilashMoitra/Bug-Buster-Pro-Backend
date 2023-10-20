@@ -1,5 +1,18 @@
 import jwt from 'jsonwebtoken';
-import { IJWTData } from '../../common/jwt.interface';
+
+
+export type IJWTData = {
+  _id: string;
+  email: string;
+  role: string
+};
+
+export type IJWTPayload = {
+  data: IJWTData;
+  iat: number;
+  exp: number;
+};
+
 
 const generateJWTToken = async (
   payload: IJWTData,
