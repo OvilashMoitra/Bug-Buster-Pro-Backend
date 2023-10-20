@@ -2,6 +2,7 @@
 import { Blog } from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
 import { prisma } from '../../../app';
+import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
 import { ICreateBlog } from './blog.interface';
 
@@ -59,7 +60,14 @@ const createBlog = async (payload: ICreateBlog) => {
         })
 
         console.log({ blogTagRefernceCreate });
-
+        await tx.websiteStats.update({
+            data: {
+                blogs: { increment: 1 }
+            },
+            where: {
+                id: config.stats_id
+            }
+        })
 
 
         return blog;

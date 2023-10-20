@@ -41,7 +41,7 @@ const createOrder = async (payload: OrderPayload): Promise<Order> => {
             },
         });
 
-        tx.websiteStats.update({
+        await tx.websiteStats.update({
             data: {
                 orders: { increment: 1 }
             },
@@ -49,6 +49,7 @@ const createOrder = async (payload: OrderPayload): Promise<Order> => {
                 id: config.stats_id
             }
         })
+
 
         return order;
     })
