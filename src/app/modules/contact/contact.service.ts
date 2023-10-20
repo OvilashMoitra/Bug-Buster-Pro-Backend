@@ -23,12 +23,15 @@ const deleteContact = async (id: string) => {
 };
 
 const updateContact = async (id: string, payload: Partial<Contact>) => {
+    console.log({ payload });
     const contactToUpdate = await prisma.contact.update({
         data: payload,
         where: {
             id: id,
         },
     });
+
+    console.log({ contactToUpdate });
 
     if (!contactToUpdate) {
         throw new ApiError(StatusCodes.BAD_REQUEST, 'No contact found');
